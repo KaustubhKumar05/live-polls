@@ -8,11 +8,21 @@ import { CirclePlus, Rocket, Trash2 } from "lucide-react";
 
 export const Create = () => {
   const history = useHistory();
-  const { questions, setQuestions, setLiveQuestions, updateAuthoredQuizzes, setCurrentRoomID } =
-    useQuizStore((store) => store);
+  const {
+    questions,
+    setQuestions,
+    setLiveQuestions,
+    updateAuthoredQuizzes,
+    setCurrentRoomID,
+  } = useQuizStore((store) => store);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState<Question | undefined>(
     questions?.[activeQuestionIndex]
+  );
+
+  useEffect(
+    () => console.log({ activeQuestion, activeQuestionIndex }),
+    [activeQuestion, activeQuestionIndex]
   );
 
   const decrementActiveQuestionIndex = useCallback(
@@ -25,7 +35,7 @@ export const Create = () => {
       ...questions[activeQuestionIndex],
       options: questions[activeQuestionIndex]?.options
         ? [...questions[activeQuestionIndex].options]
-        : undefined,
+        : [],
     });
   }, [questions, activeQuestionIndex]);
 
@@ -60,9 +70,9 @@ export const Create = () => {
       }
     );
     const data = await resp.json();
-    const quizID = data.metadata.quizID;
-    setCurrentRoomID(data.id)
-    setLiveQuestions(JSON.parse(data.metadata.questions));
+    setLiveQuestions(data.questions);
+    const quizID = data.quizID;
+    setCurrentRoomID(data.id);
     updateAuthoredQuizzes(quizID);
     history.replace(`/quiz/${quizID}`);
   };
@@ -72,7 +82,7 @@ export const Create = () => {
       <div className="bg-slate-800 rounded-md h-16 mb-4 px-3 flex w-full mx-auto items-center justify-center">
         <div className="max-w-[1440px] mx-auto w-full flex justify-end">
           <button
-            onClick={launchQuiz}
+            onClick={async () => await launchQuiz()}
             className="bg-purple-500 text-white font-semibold flex items-center gap-2 rounded-md justify-center p-2 px-3"
           >
             <Rocket size={20} /> Launch

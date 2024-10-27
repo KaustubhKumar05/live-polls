@@ -9,6 +9,8 @@ import {
 } from "@liveblocks/react/suspense";
 import { LiveList } from "@liveblocks/client";
 import useQuizStore from "../../store";
+import { Question } from "../../types";
+import { View } from "./View";
 
 export const Attempt = () => {
   let { id } = useParams();
@@ -26,29 +28,20 @@ export const Attempt = () => {
         );
         const data = await resp.json();
         setCurrentRoomID(data.id);
-        setLiveQuestions(JSON.parse(data.metadata.questions));
+        setLiveQuestions(JSON.parse(data.questions));
       }
     };
     init();
   }, [id]);
 
-  useEffect(() => console.log({ liveQuestions }), [liveQuestions]);
-
-  // Have this at q level
-  // const addResponse = useMutation(({ storage }) => {
-  //   const responses = storage.get("responses");
-  //   responses.push({});
-  // }, []);
-
-  // get room and questions from liveblocks where metadata contains ID
   return liveQuestions && liveQuestions.length > 0 ? (
     <LiveblocksProvider publicApiKey={import.meta.env.VITE_LB_PUBLIC_KEY}>
       <RoomProvider
         id={currentRoomID}
-        initialStorage={{ responses: new LiveList([]) }}
+        initialStorage={{ responses: new LiveList<Question>([]) }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>
-          Attempt {id}
+          <View id={id} />
         </ClientSideSuspense>
       </RoomProvider>
     </LiveblocksProvider>
