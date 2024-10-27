@@ -1,8 +1,8 @@
-export type QuestionType = "MCQ" | "SHORT_ANSWER";
+export type QuestionType = "Multiple Choice" | "Short Answer";
 
-export const QuestionTypes: Record<QuestionType, QuestionType> = {
-  MCQ: "MCQ",
-  SHORT_ANSWER: "SHORT_ANSWER",
+export const QuestionTypes: Record<string, QuestionType> = {
+  MCQ: "Multiple Choice",
+  SHORT_ANSWER: "Short Answer",
 };
 
 export type Question = {
@@ -13,8 +13,8 @@ export type Question = {
 };
 
 export type QuizStore = {
-  id: string,
-  setId: (value:string) => void,
-  questions: Question[],
-  setQuestions: (value: Question[]) => void,
-}
+  id: string;
+  setId: (value: string) => void;
+  questions: Question[];
+  setQuestions: (value: Question[]) => void;
+};

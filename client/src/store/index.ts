@@ -10,7 +10,7 @@ const useQuizStore = create<QuizStore>((set) => ({
       title: "Question goes here",
       questionType: QuestionTypes.MCQ,
       // At least one option needed for mcqs
-      options: [""],
+      options: ["Option 1"],
     },
   ],
   setQuestions: (values: Question[]) => set({ questions: values }),
