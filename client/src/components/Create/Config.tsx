@@ -1,6 +1,6 @@
 import React from "react";
 import { Question, QuestionType, QuestionTypes } from "../../types";
-import { Trash } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import useQuizStore from "../../store";
 
 const description = {
@@ -24,7 +24,7 @@ export const Config = ({
 }) => {
   const { questions, setQuestions } = useQuizStore((store) => store);
   return (
-    <section className="col-span-1 bg-red-300 p-2 rounded-md">
+    <section className="col-span-2 bg-slate-800 px-4 py-6 rounded-md">
       <h2 className="text-white text-2xl font-semibold text-center">
         Modify question
       </h2>
@@ -40,7 +40,7 @@ export const Config = ({
             }
             className={`p-2 text-white font-semibold w-full ${
               activeQuestion?.questionType === QuestionTypes[questionType]
-                ? "bg-gray-800"
+                ? "bg-gray-800 text-purple-500"
                 : "bg-gray-500 opacity-50"
             }`}
             key={questionType}
@@ -49,7 +49,7 @@ export const Config = ({
           </button>
         ))}
       </div>
-      <p className="text-white text-center">
+      <p className="text-gray-400 text-center text-sm font-semibold px-4">
         {description[activeQuestion!.questionType]}
       </p>
       <div className="m-2">
@@ -63,7 +63,7 @@ export const Config = ({
           }}
           className="mt-8 bg-red-400 text-white font-semibold flex items-center gap-2 rounded-md w-full justify-center p-2 disabled:opacity-80 disabled:cursor-not-allowed"
         >
-          Delete question <Trash />
+          <Trash2 size={20} /> Delete question
         </button>
       </div>
     </section>

@@ -23,7 +23,7 @@ export const Home = () => {
       />
 
       <button
-        onClick={() => history.push(`/attempt/${id}`)}
+        onClick={() => history.push(`/quiz/${id}`)}
         // Sticking with a 6 digit alphanum code for now
         disabled={id.length !== 6}
         className="bg-purple-600 text-white font-semibold px-3 py-2 rounded-md w-full md:w-60 disabled:opacity-80 disabled:cursor-not-allowed"
