@@ -14,6 +14,13 @@ const useQuizStore = create<QuizStore>((set) => ({
     },
   ],
   setQuestions: (values: Question[]) => set({ questions: values }),
+  liveQuestions: [],
+  currentRoomID: "",
+  setCurrentRoomID: (value: string) => set({ currentRoomID: value }),
+  setLiveQuestions: (values: Question[]) => set({ liveQuestions: values }),
+  authoredQuizzes: new Set(),
+  updateAuthoredQuizzes: (quizID: string) =>
+    set((state) => ({ authoredQuizzes: { ...state.authoredQuizzes, quizID } })),
 }));
 
 export default useQuizStore;

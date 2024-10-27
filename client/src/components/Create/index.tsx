@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Question, QuestionType, QuestionTypes } from "../../types";
 import { Preview } from "./Preview";
 import { Config } from "./Config";
 import useQuizStore from "../../store";
-import { CirclePlus, Delete, Rocket, Trash2 } from "lucide-react";
+import { CirclePlus, Rocket, Trash2 } from "lucide-react";
 
 export const Create = () => {
-  const { questions, setQuestions } = useQuizStore((store) => store);
+  const history = useHistory();
+  const { questions, setQuestions, setLiveQuestions, updateAuthoredQuizzes, setCurrentRoomID } =
+    useQuizStore((store) => store);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState<Question | undefined>(
     questions?.[activeQuestionIndex]
@@ -26,8 +29,6 @@ export const Create = () => {
     });
   }, [questions, activeQuestionIndex]);
 
-  // On launch, show responses and hide the config sidebar. Questions will no longer be editable
-  const [launched, setLaunched] = useState(false);
   const updateActiveQuestion = useCallback(
     (title: string, questionType: QuestionType, options?: string[]) => {
       if (activeQuestion) {
@@ -48,11 +49,32 @@ export const Create = () => {
     },
     [activeQuestion, questions]
   );
+
+  const launchQuiz = async () => {
+    const resp = await fetch(
+      `${import.meta.env.VITE_SERVER_ENDPOINT}/api/create-room`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questions }),
+      }
+    );
+    const data = await resp.json();
+    const quizID = data.metadata.quizID;
+    setCurrentRoomID(data.id)
+    setLiveQuestions(JSON.parse(data.metadata.questions));
+    updateAuthoredQuizzes(quizID);
+    history.replace(`/quiz/${quizID}`);
+  };
+
   return (
     <main className="w-full max-h-screen h-screen bg-gray-900 max-w mx-auto gap-4 p-4">
       <div className="bg-slate-800 rounded-md h-16 mb-4 px-3 flex w-full mx-auto items-center justify-center">
         <div className="max-w-[1440px] mx-auto w-full flex justify-end">
-          <button className="bg-purple-500 text-white font-semibold flex items-center gap-2 rounded-md justify-center p-2 px-3">
+          <button
+            onClick={launchQuiz}
+            className="bg-purple-500 text-white font-semibold flex items-center gap-2 rounded-md justify-center p-2 px-3"
+          >
             <Rocket size={20} /> Launch
           </button>
         </div>
@@ -84,7 +106,10 @@ export const Create = () => {
           {activeQuestion?.questionType === QuestionTypes.MCQ && (
             <ul className="list-inside mt-5">
               {activeQuestion.options?.map((option, index) => (
-                <div className="flex w-full items-center gap-4">
+                <div
+                  className="flex w-full items-center gap-4"
+                  key={`${option}-${index}`}
+                >
                   <input
                     className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-purple-600 border-slate-700 bg-slate-700"
                     onChange={(e) => {

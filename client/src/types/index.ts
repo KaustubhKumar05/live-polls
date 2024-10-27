@@ -17,4 +17,18 @@ export type QuizStore = {
   setId: (value: string) => void;
   questions: Question[];
   setQuestions: (value: Question[]) => void;
+  authoredQuizzes: Set<string>;
+  updateAuthoredQuizzes: (quizID: string) => void;
+  liveQuestions: Question[];
+  setLiveQuestions: (value: Question[]) => void;
+  currentRoomID: string;
+  setCurrentRoomID: (value: string) => void;
+};
+
+export type QuizResponse = {
+  id: string;
+  quiz_id: string;
+  question_id: string;
+  // Can be a word or an option
+  response: string;
 };

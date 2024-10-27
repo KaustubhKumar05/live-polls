@@ -1,116 +1,62 @@
 const express = require("express");
-const redis = require("redis");
+const Liveblocks = require("@liveblocks/node").Liveblocks;
 const cors = require("cors");
+const crypto = require("crypto");
 
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: true, // Allow all origins - for development
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-
-const client = redis.createClient({
-  password: process.env.REDIS_PASSWORD,
-  socket: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-  },
-});
-
-client.on("error", (err) => console.log("Redis Client Error", err));
-client.on("connect", () => console.log("Redis Client Connected"));
+const liveblocks = new Liveblocks({ secret: process.env.LB_SECRET_KEY });
 
 async function startServer() {
   try {
-    await client.connect();
-
-    // Add new board
-    app.post("/api/boards", async (req, res) => {
+    app.post("/api/create-room", async (req, res) => {
       try {
-        const { key, config } = req.body;
-        await client.set(key, JSON.stringify(config));
-        console.log(`Board saved - ${key}`);
-        res.status(200).json({ message: "Board saved successfully" });
+        const roomID = crypto.randomUUID();
+        const quizID = 100000 + Math.floor(Math.random() * 909999);
+        console.log({ question: req.body.questions });
+        const room = await liveblocks.createRoom(roomID, {
+          // The default room permissions. `[]` for private, `["room:write"]` for public.
+          defaultAccesses: ["room:write"],
+          // Optional, custom metadata to attach to the room
+          metadata: {
+            quizID: JSON.stringify(quizID),
+            questions: JSON.stringify(req.body.questions),
+          },
+        });
+        res.status(200).json({ id: room.id, metadata: room.metadata });
       } catch (err) {
-        console.error(`Could not save board ${key}`, err);
-        res.status(500).json({ error: "Error saving board" });
+        console.error("Failed", err);
+        res.status(500).json({ error: "Could not launch the quiz" });
       }
     });
-
-    // Retrieve keys -> board names
-    app.get("/api/boards", async (_, res) => {
+    // Get room
+    app.get("/api/get-room/:id", async (req, res) => {
       try {
-        const keys = await client.keys("*");
-        console.log(`Fetched ${keys.length} boards`);
-        res.json(keys);
+        const { id } = req.params;
+        const { data: rooms } = await liveblocks.getRooms({
+          limit: 1,
+          query: {
+            // Optional, filter for rooms with custom metadata in `metadata`
+            metadata: {
+              quizID: id.toString(),
+            },
+          },
+        });
+        console.log(rooms);
+        res.status(200).json({ id: rooms[0].id, metadata: rooms[0].metadata });
       } catch (err) {
-        console.error(`Error fetching board names:`, err);
-        res.status(500).json({ error: "Error retrieving boards" });
-      }
-    });
-
-    // Get board
-    app.get("/api/boards/:key", async (req, res) => {
-      try {
-        const { key } = req.params;
-        const reply = await client.get(key);
-        if (reply) {
-          console.log(`Fetched config for board - ${key}`);
-          res.json(JSON.parse(reply));
-        } else {
-          console.log(`Could not find config for board - ${key}`);
-          res.status(404).json({ error: "Board not found" });
-        }
-      } catch (err) {
-        console.error(`Error fetching board - ${key}:`, err);
-        res.status(500).json({ error: "Error retrieving board" });
-      }
-    });
-
-    // Update board
-    app.put("/api/board/:key", async (req, res) => {
-      try {
-        const { key } = req.params;
-        const { config } = req.body;
-        if (key === "Default") {
-          return res
-            .status(400)
-            .json({ error: "Default board cannot be updated" });
-        }
-        const exists = await client.exists(key);
-        if (exists) {
-          await client.set(key, JSON.stringify(config));
-          console.log(`Board updated - ${key}`);
-          res.json({ message: "Board updated successfully" });
-        } else {
-          console.error(`Board not found - ${key}. Could not be updated`);
-          res.status(404).json({ error: "Board not found" });
-        }
-      } catch (err) {
-        console.error(`Error updating board ${key}:`, err);
-        res.status(500).json({ error: "Error updating board" });
-      }
-    });
-
-    // Delete board
-    app.delete("/api/boards/:key", async (req, res) => {
-      try {
-        const { key } = req.params;
-        if (key === "Default") {
-          return res
-            .status(400)
-            .json({ error: "Default board cannot be deleted" });
-        }
-        const reply = await client.del(key);
-        if (reply === 1) {
-          console.log(`Board deleted - ${key}`);
-          res.json({ message: "Board deleted successfully" });
-        } else {
-          console.log(`Board not found for deletion - ${key}`);
-          res.status(404).json({ error: "Board not found" });
-        }
-      } catch (err) {
-        console.error(`Error deleting board ${key}:`,err);
-        res.status(500).json({ error: "Error deleting board" });
+        console.error(`Error fetching quiz:`, err);
+        res.status(500).json({ error: "Could not find the quiz" });
       }
     });
 
