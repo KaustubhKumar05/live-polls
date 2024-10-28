@@ -5,7 +5,7 @@ import { QuestionCard } from "./QuestionCard";
 
 export const View = ({ id }: { id: string }) => {
   const { liveQuestions, authoredQuizzes } = useQuizStore((store) => store);
-  const isAuthor = authoredQuizzes?.has(id);
+  const isAuthor = authoredQuizzes.has(id);
   return (
     <div className="w-full h-screen bg-slate-900 flex justify-center items-center">
       {isAuthor ? (

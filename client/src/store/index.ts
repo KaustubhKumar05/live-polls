@@ -20,7 +20,9 @@ const useQuizStore = create<QuizStore>((set) => ({
   setLiveQuestions: (values: Question[]) => set({ liveQuestions: values }),
   authoredQuizzes: new Set(),
   updateAuthoredQuizzes: (quizID: string) =>
-    set((state) => ({ authoredQuizzes: { ...state.authoredQuizzes, quizID } })),
+    set((state) => ({
+      authoredQuizzes: new Set(state.authoredQuizzes).add(quizID),
+    })),
 }));
 
 export default useQuizStore;
