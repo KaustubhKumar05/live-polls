@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   ClientSideSuspense,
   LiveblocksProvider,
   RoomProvider,
   // useHistory,
-  // useMutation,
 } from "@liveblocks/react/suspense";
 import { LiveList } from "@liveblocks/client";
 import useQuizStore from "../../store";
@@ -52,6 +51,5 @@ export const Attempt = () => {
 
 /**
  * Show timer in the navbar, stop button for author
- * Chevrons at the top for navigation
  * Submit for MCQ and text based, show everyone's responses after submission
  */
