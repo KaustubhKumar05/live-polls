@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Question, QuestionType, QuestionTypes } from "../../types";
+import { QuestionType, QuestionTypes } from "../../types";
 import { Preview } from "./Preview";
 import { Config } from "./Config";
 import useQuizStore from "../../store";
@@ -100,10 +100,7 @@ export const Create = () => {
           {activeQuestion?.questionType === QuestionTypes.MCQ && (
             <ul className="list-inside mt-5">
               {activeQuestion.options?.map((option, index) => (
-                <div
-                  className="flex w-full items-center gap-4"
-                  key={`${option}-${index}`}
-                >
+                <div className="flex w-full items-center gap-4" key={index}>
                   <input
                     className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-purple-600 border-slate-700 bg-slate-700"
                     onChange={(e) => {
