@@ -44,12 +44,15 @@ async function startServer() {
           // Optional, custom metadata to attach to the room
           metadata: {
             quizID,
+            active: "true",
           },
         });
-        res.status(200).json({ id: room.id, questions, quizID });
+        return res
+          .status(200)
+          .json({ id: room.id, questions, quizID, active: true });
       } catch (err) {
         console.error("Failed", err);
-        res.status(500).json({ error: "Could not launch the quiz" });
+        return res.status(500).json({ error: "Could not launch the quiz" });
       }
     });
     // ID is the quiz ID
@@ -66,11 +69,31 @@ async function startServer() {
             },
           },
         });
-        console.log(reply);
-        res.status(200).json({ id: rooms[0].id, questions: reply });
+
+        return res.status(200).json({
+          id: rooms[0].id,
+          questions: reply,
+          active: rooms[0].metadata.active,
+        });
       } catch (err) {
         console.error(`Error fetching quiz:`, err);
-        res.status(500).json({ error: "Could not find the quiz" });
+        return res.status(500).json({ error: "Could not find the quiz" });
+      }
+    });
+
+    app.post("/api/stop-quiz", async (req, res) => {
+      try {
+        const { roomID, quizID } = req.body;
+        const room = await liveblocks.updateRoom(roomID, {
+          metadata: { active: "false", quizID },
+        });
+        if (room.metadata.active === "false") {
+          return res.status(200).json({ message: "Quiz stopped", ok: true });
+        }
+        throw "Could not update room metadata";
+      } catch (err) {
+        console.error(`Error stopping quiz:`, err);
+        return res.status(500).json({ error: "Could not stop the quiz" });
       }
     });
 

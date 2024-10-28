@@ -25,7 +25,7 @@ export const Preview = ({
   return (
     <section className="bg-slate-800 px-4 py-6 min-h-0 flex-1 overflow-y-auto rounded-md col-span-2">
       <h2 className="text-2xl font-semibold text-center text-white">Preview</h2>
-      <div className="py-2 my-2 sticky top-0 rounded-md">
+      <div className="py-2 my-2 rounded-md">
         <button
           onClick={addQuestion}
           className="p-2 px-3 text-orange-400 font-semibold w-full text-center bg-slate-700 rounded-md flex items-center gap-2 justify-center"

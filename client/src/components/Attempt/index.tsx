@@ -16,8 +16,13 @@ export const Attempt = () => {
 
   // const { pause } = useHistory();
 
-  const { currentRoomID, setCurrentRoomID, setLiveQuestions, liveQuestions } =
-    useQuizStore((state) => state);
+  const {
+    currentRoomID,
+    setCurrentRoomID,
+    setLiveQuestions,
+    liveQuestions,
+    setEnded,
+  } = useQuizStore((state) => state);
 
   useEffect(() => {
     const init = async () => {
@@ -28,6 +33,7 @@ export const Attempt = () => {
         const data = await resp.json();
         setCurrentRoomID(data.id);
         setLiveQuestions(JSON.parse(data.questions));
+        setEnded(data.active === "false");
       }
     };
     init();

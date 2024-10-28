@@ -1,9 +1,11 @@
 import { create } from "zustand";
-import { Question, QuestionTypes, QuizStore } from "../types";
+import { QuestionTypes, QuizStore } from "../types";
 
 const useQuizStore = create<QuizStore>((set) => ({
   id: "",
-  setId: (value: string) => set({ id: value }),
+  ended: false,
+  setEnded: (ended) => set({ ended }),
+  setId: (id) => set({ id }),
   questions: [
     {
       id: crypto.randomUUID(),
@@ -13,11 +15,11 @@ const useQuizStore = create<QuizStore>((set) => ({
       options: ["Option 1"],
     },
   ],
-  setQuestions: (values: Question[]) => set({ questions: values }),
+  setQuestions: (questions) => set({ questions }),
   liveQuestions: [],
   currentRoomID: "",
-  setCurrentRoomID: (value: string) => set({ currentRoomID: value }),
-  setLiveQuestions: (values: Question[]) => set({ liveQuestions: values }),
+  setCurrentRoomID: (currentRoomID) => set({ currentRoomID }),
+  setLiveQuestions: (liveQuestions) => set({ liveQuestions }),
   authoredQuizzes: new Set(),
   updateAuthoredQuizzes: (quizID: string) =>
     set((state) => ({

@@ -23,6 +23,8 @@ export type QuizStore = {
   setLiveQuestions: (value: Question[]) => void;
   currentRoomID: string;
   setCurrentRoomID: (value: string) => void;
+  ended: boolean;
+  setEnded: (value: boolean) => void;
 };
 
 export type QuizResponse = {
