@@ -16,28 +16,12 @@ export const Create = () => {
     setCurrentRoomID,
   } = useQuizStore((store) => store);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState<Question | undefined>(
-    questions?.[activeQuestionIndex]
-  );
-
-  useEffect(
-    () => console.log({ activeQuestion, activeQuestionIndex }),
-    [activeQuestion, activeQuestionIndex]
-  );
+  const activeQuestion = questions[activeQuestionIndex];
 
   const decrementActiveQuestionIndex = useCallback(
     () => setActiveQuestionIndex(Math.max(0, activeQuestionIndex - 1)),
     [activeQuestionIndex]
   );
-
-  useEffect(() => {
-    setActiveQuestion({
-      ...questions[activeQuestionIndex],
-      options: questions[activeQuestionIndex]?.options
-        ? [...questions[activeQuestionIndex].options]
-        : [],
-    });
-  }, [questions, activeQuestionIndex]);
 
   const updateActiveQuestion = useCallback(
     (title: string, questionType: QuestionType, options?: string[]) => {

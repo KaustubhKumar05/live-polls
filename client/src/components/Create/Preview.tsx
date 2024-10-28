@@ -16,7 +16,7 @@ export const Preview = ({
       id: crypto.randomUUID(),
       title: "Question goes here",
       questionType: QuestionTypes.MCQ,
-      options: [`Option ${activeQuestion?.options?.length || 0 + 1}`],
+      options: ["Option 1"],
     };
     setQuestions([...questions, newQuestion]);
     // To prevent a race condition and fix the exec order
