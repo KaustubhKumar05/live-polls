@@ -1,6 +1,7 @@
-import { Copy, StopCircle } from "lucide-react";
-import React, { useState } from "react";
+import { Copy, Loader, StopCircle } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import useQuizStore from "../../store";
+import { useBroadcastEvent, useEventListener } from "@liveblocks/react";
 
 export const Header = ({ id }) => {
   const { authoredQuizzes, ended, currentRoomID, setEnded } = useQuizStore(
@@ -8,6 +9,15 @@ export const Header = ({ id }) => {
   );
   const isAuthor = authoredQuizzes.has(id);
   const [copiedLink, setCopiedLink] = useState(false);
+  const broadcast = useBroadcastEvent();
+  const [endClicked, setEndClicked] = useState(false);
+
+  useEventListener(({ event, user, connectionId }) => {
+    // @ts-ignore
+    if (event?.type === "STATUS" && event?.ended) {
+      setEnded(true);
+    }
+  });
 
   return (
     <div className="bg-slate-700 w-full flex items-center justify-center sticky top-0 py-2">
@@ -28,7 +38,9 @@ export const Header = ({ id }) => {
             <p className="text-red-600 font-semibold">Ended</p>
           ) : (
             <button
+              disabled={endClicked}
               onClick={async () => {
+                setEndClicked(true);
                 const resp = await fetch(
                   import.meta.env.VITE_SERVER_ENDPOINT + "/api/stop-quiz",
                   {
@@ -38,11 +50,19 @@ export const Header = ({ id }) => {
                   }
                 );
                 const data = await resp.json();
+                if (data.ok) {
+                  broadcast({ type: "STATUS", ended: true });
+                }
                 setEnded(!!data.ok);
+                setEndClicked(false);
               }}
-              className="flex items-center gap-1 bg-red-500 text-white font-semibold p-2 rounded-md text-sm"
+              className={`flex items-center gap-1 bg-red-500 text-white font-semibold p-2 rounded-md text-sm disabled:opacity-80 disabled:cursor-not-allowed cursor-pointer`}
             >
-              <StopCircle size={20} />
+              {endClicked ? (
+                <Loader size={20} className="animate-spin" />
+              ) : (
+                <StopCircle size={20} />
+              )}
               Stop quiz
             </button>
           )}
