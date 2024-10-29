@@ -4,17 +4,15 @@ import {
   ClientSideSuspense,
   LiveblocksProvider,
   RoomProvider,
-  // useHistory,
 } from "@liveblocks/react/suspense";
 import { LiveList } from "@liveblocks/client";
 import useQuizStore from "../../store";
 import { Question } from "../../types";
 import { View } from "./View";
+import { FullPageLoader } from "../FullPageLoader";
 
 export const Attempt = () => {
   let { id } = useParams();
-
-  // const { pause } = useHistory();
 
   const {
     currentRoomID,
@@ -51,7 +49,7 @@ export const Attempt = () => {
       </RoomProvider>
     </LiveblocksProvider>
   ) : (
-    "Loading..."
+    <FullPageLoader />
   );
 };
 

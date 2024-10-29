@@ -5,9 +5,11 @@ import { Preview } from "./Preview";
 import { Config } from "./Config";
 import useQuizStore from "../../store";
 import { CirclePlus, Rocket, Trash2 } from "lucide-react";
+import { FullPageLoader } from "../FullPageLoader";
 
 export const Create = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const {
     questions,
     setQuestions,
@@ -45,21 +47,30 @@ export const Create = () => {
   );
 
   const launchQuiz = async () => {
-    const resp = await fetch(
-      `${import.meta.env.VITE_SERVER_ENDPOINT}/api/create-room`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questions }),
-      }
-    );
-    const data = await resp.json();
-    setLiveQuestions(data.questions);
-    const quizID = data.quizID;
-    setCurrentRoomID(data.id);
-    updateAuthoredQuizzes(quizID);
-    history.replace(`/quiz/${quizID}`);
+    setLoading(true);
+    try {
+      const resp = await fetch(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/api/create-room`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ questions }),
+        }
+      );
+      const data = await resp.json();
+      setLiveQuestions(data.questions);
+      const quizID = data.quizID;
+      setCurrentRoomID(data.id);
+      updateAuthoredQuizzes(quizID);
+      history.replace(`/quiz/${quizID}`);
+    } catch (err) {
+      console.error("Error launching quiz:", err);
+      window.alert("Could not launch quiz");
+      setLoading(false);
+    }
   };
+
+  if (loading) return <FullPageLoader />;
 
   return (
     <main className="w-full max-h-screen h-screen bg-gray-900 max-w mx-auto gap-4 p-4">
