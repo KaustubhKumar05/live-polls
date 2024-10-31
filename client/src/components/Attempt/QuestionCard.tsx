@@ -50,7 +50,7 @@ export const QuestionCard = ({
 
   return (
     <div className="w-full bg-slate-700 max-w-md p-4 rounded-md my-4">
-      <h2 className="text-white text-2xl font-bold">{question.title}</h2>
+      <h2 className="text-white text-xl font-semibold">{question.title}</h2>
       <div className="my-4">
         {question.questionType === QuestionTypes.MCQ &&
           question.options?.map((option, index) => (

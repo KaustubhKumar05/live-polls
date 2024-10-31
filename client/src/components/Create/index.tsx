@@ -6,6 +6,7 @@ import useQuizStore from "../../store";
 import { CirclePlus, Rocket, Trash2 } from "lucide-react";
 import { FullPageLoader } from "../FullPageLoader";
 import { useQuizManager } from "../../hooks/useQuizManager";
+import { LivePollsTitle } from "../LivePollsTitle";
 
 export const Create = () => {
   const [loading, setLoading] = useState(false);
@@ -44,9 +45,10 @@ export const Create = () => {
   if (loading) return <FullPageLoader />;
 
   return (
-    <main className="w-full max-h-screen h-screen bg-gray-900 max-w mx-auto gap-4 p-4">
-      <div className="bg-slate-800 rounded-md h-16 mb-4 px-3 flex w-full mx-auto items-center justify-center">
-        <div className="max-w-[1440px] mx-auto w-full flex justify-end">
+    <main className="w-full max-h-screen h-screen bg-gray-900 max-w mx-auto gap-4">
+      <div className="bg-slate-800 rounded-md h-16 mb-4 px-4 flex w-full mx-auto items-center justify-center">
+        <div className="max-w-[1440px] mx-auto w-full flex justify-between items-center">
+          <LivePollsTitle />
           <button
             onClick={async () => {
               setLoading(true);
@@ -62,7 +64,7 @@ export const Create = () => {
       {/* Subtract header, gaps */}
       <div
         className="grid grid-cols-8 gap-4 max-w-[1440px] mx-auto"
-        style={{ height: "calc(100vh - 64px - 3*16px)" }}
+        style={{ height: "calc(100vh - 64px - 2*16px)" }}
       >
         <Preview
           activeQuestion={activeQuestion}

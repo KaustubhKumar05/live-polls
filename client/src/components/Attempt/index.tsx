@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   ClientSideSuspense,
@@ -11,16 +11,31 @@ import { Question } from "../../types";
 import { View } from "./View";
 import { FullPageLoader } from "../FullPageLoader";
 import { useQuizManager } from "../../hooks/useQuizManager";
+import { useHistory } from "react-router-dom";
 
 export const Attempt = () => {
   let { id } = useParams();
 
   const { currentRoomID, liveQuestions } = useQuizStore((state) => state);
   const { getQuiz } = useQuizManager();
+  const [fetching, setFetching] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
-    getQuiz(id);
+    const init = async () => {
+      setFetching(true);
+      await getQuiz(id);
+      setFetching(false);
+    };
+    init();
   }, [id]);
+
+  useEffect(() => {
+    if (!fetching && liveQuestions.length === 0) {
+      alert("Quiz not found");
+      history.push("/");
+    }
+  }, [fetching, liveQuestions]);
 
   return liveQuestions && liveQuestions.length > 0 ? (
     <LiveblocksProvider publicApiKey={import.meta.env.VITE_LB_PUBLIC_KEY}>

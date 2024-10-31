@@ -70,6 +70,10 @@ async function startServer() {
           },
         });
 
+        if (rooms.length === 0) {
+          return res.status(400).json({ error: "Quiz not found" });
+        }
+
         return res.status(200).json({
           id: rooms[0].id,
           questions: reply,

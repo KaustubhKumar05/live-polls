@@ -42,8 +42,12 @@ export const useQuizManager = () => {
       );
       const data = await resp.json();
       setCurrentRoomID(data.id);
-      setLiveQuestions(JSON.parse(data.questions));
+      setLiveQuestions(JSON.parse(data.questions || "[]"));
       setEnded(data.active === "false");
+      if (data.error) {
+        window.alert(data.error);
+        console.error(data.error);
+      }
     }
   };
 
