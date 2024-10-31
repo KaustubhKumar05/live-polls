@@ -1,12 +1,3 @@
 {
-  "routes": [
-    {
-      "src": "/quiz/[id]",
-      "dest": "/"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
