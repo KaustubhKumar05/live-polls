@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import useQuizStore from "../../store";
-import { Copy, Link, StopCircle } from "lucide-react";
 import { QuestionCard } from "./QuestionCard";
 import { Header } from "./Header";
 

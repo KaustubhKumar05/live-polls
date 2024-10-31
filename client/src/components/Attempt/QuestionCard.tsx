@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Question, QuestionTypes, QuizResponse } from "../../types";
 import { useMutation, useStorage } from "@liveblocks/react";
 import { LiveList } from "@liveblocks/client";

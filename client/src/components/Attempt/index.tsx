@@ -10,31 +10,16 @@ import useQuizStore from "../../store";
 import { Question } from "../../types";
 import { View } from "./View";
 import { FullPageLoader } from "../FullPageLoader";
+import { useQuizManager } from "../../hooks/useQuizManager";
 
 export const Attempt = () => {
   let { id } = useParams();
 
-  const {
-    currentRoomID,
-    setCurrentRoomID,
-    setLiveQuestions,
-    liveQuestions,
-    setEnded,
-  } = useQuizStore((state) => state);
+  const { currentRoomID, liveQuestions } = useQuizStore((state) => state);
+  const { getQuiz } = useQuizManager();
 
   useEffect(() => {
-    const init = async () => {
-      if (!currentRoomID) {
-        const resp = await fetch(
-          `${import.meta.env.VITE_SERVER_ENDPOINT}/api/get-room/${id}`
-        );
-        const data = await resp.json();
-        setCurrentRoomID(data.id);
-        setLiveQuestions(JSON.parse(data.questions));
-        setEnded(data.active === "false");
-      }
-    };
-    init();
+    getQuiz(id);
   }, [id]);
 
   return liveQuestions && liveQuestions.length > 0 ? (
@@ -52,8 +37,3 @@ export const Attempt = () => {
     <FullPageLoader />
   );
 };
-
-/**
- * Show timer in the navbar, stop button for author
- * Submit for MCQ and text based, show everyone's responses after submission
- */

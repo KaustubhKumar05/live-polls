@@ -1,18 +1,20 @@
 import { Copy, Loader, StopCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useQuizStore from "../../store";
 import { useBroadcastEvent, useEventListener } from "@liveblocks/react";
+import { useQuizManager } from "../../hooks/useQuizManager";
 
 export const Header = ({ id }) => {
-  const { authoredQuizzes, ended, currentRoomID, setEnded } = useQuizStore(
+  const { authoredQuizzes, ended, setEnded } = useQuizStore(
     (store) => store
   );
+  const { endQuiz } = useQuizManager();
   const isAuthor = authoredQuizzes.has(id);
   const [copiedLink, setCopiedLink] = useState(false);
   const broadcast = useBroadcastEvent();
   const [endClicked, setEndClicked] = useState(false);
 
-  useEventListener(({ event, user, connectionId }) => {
+  useEventListener(({ event }) => {
     // @ts-ignore
     if (event?.type === "STATUS" && event?.ended) {
       setEnded(true);
@@ -36,24 +38,16 @@ export const Header = ({ id }) => {
           </button>
           {ended ? (
             <p className="text-red-600 font-semibold">Ended</p>
-          ) : (
+          ) : isAuthor ? (
             <button
               disabled={endClicked}
               onClick={async () => {
                 setEndClicked(true);
-                const resp = await fetch(
-                  import.meta.env.VITE_SERVER_ENDPOINT + "/api/stop-quiz",
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ roomID: currentRoomID, quizID: id }),
-                  }
-                );
-                const data = await resp.json();
-                if (data.ok) {
+                const ok = await endQuiz(id);
+                if (ok) {
                   broadcast({ type: "STATUS", ended: true });
                 }
-                setEnded(!!data.ok);
+                setEnded(!!ok);
                 setEndClicked(false);
               }}
               className={`flex items-center gap-1 bg-red-500 text-white font-semibold p-2 rounded-md text-sm disabled:opacity-80 disabled:cursor-not-allowed cursor-pointer`}
@@ -65,7 +59,7 @@ export const Header = ({ id }) => {
               )}
               Stop quiz
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

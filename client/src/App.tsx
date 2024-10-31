@@ -19,9 +19,6 @@ export default App;
 
 
 /**
- * 
  * Todo
- * - refactor to useUpdateRoom
  * - improve CSS
- * 
  */

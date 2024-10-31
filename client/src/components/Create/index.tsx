@@ -1,22 +1,15 @@
 import React, { useCallback, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { QuestionType, QuestionTypes } from "../../types";
 import { Preview } from "./Preview";
 import { Config } from "./Config";
 import useQuizStore from "../../store";
 import { CirclePlus, Rocket, Trash2 } from "lucide-react";
 import { FullPageLoader } from "../FullPageLoader";
+import { useQuizManager } from "../../hooks/useQuizManager";
 
 export const Create = () => {
-  const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const {
-    questions,
-    setQuestions,
-    setLiveQuestions,
-    updateAuthoredQuizzes,
-    setCurrentRoomID,
-  } = useQuizStore((store) => store);
+  const { questions, setQuestions } = useQuizStore((store) => store);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const activeQuestion = questions[activeQuestionIndex];
 
@@ -46,29 +39,7 @@ export const Create = () => {
     [activeQuestion, questions]
   );
 
-  const launchQuiz = async () => {
-    setLoading(true);
-    try {
-      const resp = await fetch(
-        `${import.meta.env.VITE_SERVER_ENDPOINT}/api/create-room`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ questions }),
-        }
-      );
-      const data = await resp.json();
-      setLiveQuestions(data.questions);
-      const quizID = data.quizID;
-      setCurrentRoomID(data.id);
-      updateAuthoredQuizzes(quizID);
-      history.replace(`/quiz/${quizID}`);
-    } catch (err) {
-      console.error("Error launching quiz:", err);
-      window.alert("Could not launch quiz");
-      setLoading(false);
-    }
-  };
+  const { launchQuiz } = useQuizManager();
 
   if (loading) return <FullPageLoader />;
 
@@ -77,7 +48,11 @@ export const Create = () => {
       <div className="bg-slate-800 rounded-md h-16 mb-4 px-3 flex w-full mx-auto items-center justify-center">
         <div className="max-w-[1440px] mx-auto w-full flex justify-end">
           <button
-            onClick={async () => await launchQuiz()}
+            onClick={async () => {
+              setLoading(true);
+              await launchQuiz();
+              setLoading(false);
+            }}
             className="bg-purple-500 text-white font-semibold flex items-center gap-2 rounded-md justify-center p-2 px-3"
           >
             <Rocket size={20} /> Launch
