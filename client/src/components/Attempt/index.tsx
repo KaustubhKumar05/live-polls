@@ -18,7 +18,7 @@ export const Attempt = () => {
 
   const { currentRoomID, liveQuestions } = useQuizStore((state) => state);
   const { getQuiz } = useQuizManager();
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState<boolean | undefined>(undefined);
   const history = useHistory();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const Attempt = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!fetching && liveQuestions.length === 0) {
+    if (fetching === false && liveQuestions.length === 0) {
       alert("Quiz not found");
       history.push("/");
     }
