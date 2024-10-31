@@ -21,7 +21,7 @@ export const Header = ({ id }) => {
   });
 
   return (
-    <div className="bg-slate-700 w-full flex items-center justify-center sticky top-0 py-2">
+    <div className="bg-slate-700 w-full flex items-center justify-center py-2">
       <div className="flex w-full max-w-7xl justify-between items-center px-4">
         <LivePollsTitle />
         <div className="flex gap-4 items-center">
