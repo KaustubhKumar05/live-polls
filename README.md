@@ -1,8 +1,26 @@
-# React + Vite
+# Live Polls
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Polls built on top of Liveblocks (client, react and node SDKs). This project uses:
 
-Currently, two official plugins are available:
+- React + Vite
+- Zustand
+- Express
+- Redis 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Flow:
+
+After adding questions, the author can launch the quiz. First, a quiz ID is created which is used to map quiz to a liveblocks room and also the key to the redis entries. This quiz ID and an `active` field are set in the room metadata and the questions are stored in redis. After completion, the author is also redirected to the attempt view.
+
+The room ID is fetched in the attempt flow using metadata filters to match the quiz ID. Then the questions are fetched from redis. The responses are stored in a LiveList. The author can stop the quiz through the UI - this sets the `active` field in the room metadata to `false` and broadcasts an event to all peers in the room, updating their UI as well. Once the quiz is stopped, existing and new joinees can still see the questions and submitted responses but cannot submit new ones.
+
+
+### Hosting
+
+The frontend is hosted on Vercel: https://live-polls-demo.vercel.app
+
+The node server is hosted on Railway
+
+
+### Other dependencies
+
+TailwindCSS, react-router-dom, react-toastify, lucide-icons

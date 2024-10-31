@@ -7,14 +7,7 @@ const crypto = require("crypto");
 require("dotenv").config();
 
 const app = express();
-app.use(
-  cors({
-    origin: true, // Allow all origins - for development
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 const client = redis.createClient({
   password: process.env.REDIS_PASSWORD,
@@ -54,7 +47,8 @@ async function startServer() {
         return res.status(500).json({ error: "Could not launch the quiz" });
       }
     });
-    // ID is the quiz ID
+
+    // ID -> quiz ID
     app.get("/api/get-room/:id", async (req, res) => {
       try {
         const { id } = req.params;
@@ -69,7 +63,9 @@ async function startServer() {
         });
 
         if (rooms.length === 0) {
-          return res.status(400).json({ error: "Quiz not found" });
+          return res
+            .status(400)
+            .json({ error: "Quiz not found, please check the code" });
         }
 
         return res.status(200).json({
@@ -79,7 +75,7 @@ async function startServer() {
         });
       } catch (err) {
         console.error(`Error fetching quiz:`, err);
-        return res.status(500).json({ error: "Could not find the quiz" });
+        return res.status(500).json({ error: "Could not fetch the quiz" });
       }
     });
 
