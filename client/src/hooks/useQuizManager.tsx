@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import useQuizStore from "../store";
 import { useHistory } from "react-router-dom";
 
@@ -31,7 +32,7 @@ export const useQuizManager = () => {
       history.replace(`/quiz/${quizID}`);
     } catch (err) {
       console.error("Error launching quiz:", err);
-      window.alert("Could not launch quiz");
+      toast.error("Could not launch quiz", { theme: "dark" });
     }
   };
 
@@ -45,7 +46,7 @@ export const useQuizManager = () => {
       setLiveQuestions(JSON.parse(data.questions || "[]"));
       setEnded(data.active === "false");
       if (data.error) {
-        window.alert(data.error);
+        toast.error(data.error, { theme: "dark" });
         console.error(data.error);
       }
     }

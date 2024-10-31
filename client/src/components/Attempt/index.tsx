@@ -12,6 +12,7 @@ import { View } from "./View";
 import { FullPageLoader } from "../FullPageLoader";
 import { useQuizManager } from "../../hooks/useQuizManager";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Attempt = () => {
   let { id } = useParams();
@@ -32,7 +33,6 @@ export const Attempt = () => {
 
   useEffect(() => {
     if (fetching === false && liveQuestions.length === 0) {
-      alert("Quiz not found");
       history.push("/");
     }
   }, [fetching, liveQuestions]);

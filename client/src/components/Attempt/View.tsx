@@ -9,15 +9,15 @@ export const View = ({ id }: { id: string }) => {
   return (
     <div className="w-full h-screen bg-slate-900 flex flex-col items-center">
       <Header id={id} />
-      <div className="px-4 w-full">
-        <div className="w-full flex justify-between p-4 bg-slate-800 my-4 sticky top-0 rounded-md z-10 max-w-md">
+      <div className="p-4 w-full h-screen flex flex-col items-center">
+        <div className="w-full flex justify-between p-4 bg-slate-800 mb-4 sticky top-0 rounded-md z-10 max-w-md">
           <p className="text-white font-semibold">Poll Code: {id}</p>
           <p
             className={`${
               ended ? "text-red-500" : "text-green-500"
-            } font-semibold`}
+            } font-semibold uppercase`}
           >
-            Status: {ended ? "Ended" : "Live"}
+            {ended ? "Ended" : "Live"}
           </p>
         </div>
         <div className="overflow-y-auto w-full max-w-md bg-slate-800 min-h-0 px-4 flex-1 rounded-md">

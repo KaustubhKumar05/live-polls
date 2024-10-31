@@ -9,7 +9,7 @@ export const Home = () => {
 
   return (
     <main className="w-full h-screen bg-gray-800 flex flex-col justify-center items-center gap-4 p-4 md:p-8">
-      <div className="bg-slate-700 w-full flex items-center justify-center py-3 fixed top-0 left-0">
+      <div className="bg-slate-700 w-full flex items-center justify-center p-3 fixed top-0 left-0">
         <div className="max-w-[1440px] w-full px-2">
           <LivePollsTitle />
         </div>

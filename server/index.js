@@ -41,7 +41,6 @@ async function startServer() {
         const room = await liveblocks.createRoom(roomID, {
           // The default room permissions. `[]` for private, `["room:write"]` for public.
           defaultAccesses: ["room:write"],
-          // Optional, custom metadata to attach to the room
           metadata: {
             quizID,
             active: "true",
@@ -63,7 +62,6 @@ async function startServer() {
         const { data: rooms } = await liveblocks.getRooms({
           limit: 1,
           query: {
-            // Optional, filter for rooms with custom metadata in `metadata`
             metadata: {
               quizID: id.toString(),
             },
