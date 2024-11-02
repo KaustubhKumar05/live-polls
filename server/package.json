@@ -1,7 +1,7 @@
 {
-  "name": "soundboard-server",
+  "name": "polls-server",
   "version": "1.0.0",
-  "description": "Backend for Soundboard",
+  "description": "Backend for Live Polls",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
