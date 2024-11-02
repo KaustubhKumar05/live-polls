@@ -16,7 +16,7 @@ export const Preview = ({
       id: crypto.randomUUID(),
       title: "Question goes here",
       questionType: QuestionTypes.MCQ,
-      options: ["Option 1"],
+      options: ["Option 1", "Option 2"],
     };
     setQuestions([...questions, newQuestion]);
     // To prevent a race condition and fix the exec order
@@ -28,7 +28,7 @@ export const Preview = ({
       <div className="py-2 my-2 rounded-md">
         <button
           onClick={addQuestion}
-          className="p-2 px-3 text-orange-400 font-semibold w-full text-center bg-slate-700 rounded-md flex items-center gap-2 justify-center"
+          className="p-2 px-3 text-white font-semibold w-full hover:opacity-90 text-center bg-gray-600 rounded-md flex items-center gap-2 justify-center"
         >
           <SquarePlus size={20} /> Add question
         </button>
@@ -37,9 +37,9 @@ export const Preview = ({
         {questions.map((question, index) => (
           <div
             key={question.id}
-            className={`bg-white text-black h-32 w-full flex flex-col items-center border-2 gap-2 justify-center rounded-md ${
+            className={`bg-white text-black h-32 w-full flex flex-col items-center border-4 gap-2 justify-center rounded-md ${
               question.id === activeQuestion?.id
-                ? "border-purple-400"
+                ? "border-blue-500"
                 : "border-white"
             }`}
             onClick={() => setActiveQuestionIndex(index)}

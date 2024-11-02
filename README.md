@@ -19,6 +19,13 @@ The frontend is hosted on [Vercel](https://vercel.com): [Deployment link](https:
 
 The node server is hosted on [Railway](https://railway.app)
 
+### Further improvements
+
+- Quizzes - specify correct answers
+- Multicorrect type
+- Metrics for time taken to submit per question
+- Leaderboard?
+
 ### Other dependencies
 
 TailwindCSS, react-router-dom, react-toastify, lucide-icons

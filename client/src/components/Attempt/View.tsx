@@ -7,15 +7,18 @@ export const View = ({ id }: { id: string }) => {
   const { liveQuestions, ended } = useQuizStore((store) => store);
 
   return (
-    <div className="w-full h-screen bg-slate-900 flex flex-col items-center">
+    <div className="w-full h-screen max-h-screen overflow-hidden bg-black flex flex-col items-center">
       <Header id={id} />
-      <div className="p-4 w-full h-screen flex flex-col items-center">
-        <div className="w-full flex justify-between p-4 bg-slate-800 mb-4 sticky top-0 rounded-md z-10 max-w-md">
+      <div
+        className="p-4 w-full flex flex-col items-center"
+        style={{ height: "calc(100vh - 61px)" }}
+      >
+        <div className="w-full flex justify-between p-4 items-center bg-slate-800 mb-4 rounded-md z-10 max-w-md">
           <p className="text-white font-semibold">Poll Code: {id}</p>
           <p
             className={`${
-              ended ? "text-red-500" : "text-green-500"
-            } font-semibold uppercase`}
+              ended ? "bg-red-500" : "bg-blue-500"
+            } font-semibold uppercase text-white py-1 rounded px-2`}
           >
             {ended ? "Ended" : "Live"}
           </p>

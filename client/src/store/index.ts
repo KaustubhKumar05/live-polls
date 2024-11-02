@@ -6,15 +6,7 @@ const useQuizStore = create<QuizStore>((set) => ({
   ended: false,
   setEnded: (ended) => set({ ended }),
   setId: (id) => set({ id }),
-  questions: [
-    {
-      id: crypto.randomUUID(),
-      title: "Question goes here",
-      questionType: QuestionTypes.MCQ,
-      // At least one option needed for mcqs
-      options: ["Option 1"],
-    },
-  ],
+  questions: [],
   setQuestions: (questions) => set({ questions }),
   liveQuestions: [],
   currentRoomID: "",

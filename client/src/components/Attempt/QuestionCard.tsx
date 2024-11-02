@@ -61,7 +61,7 @@ export const QuestionCard = ({
                   value={option}
                   className={`${
                     localResponse || ended ? "pointer-events-none" : ""
-                  } p-1 invert`}
+                  } p-1`}
                   checked={draftResponse === index.toString()}
                   onChange={() => setDraftResponse(index.toString())}
                 />
@@ -84,7 +84,7 @@ export const QuestionCard = ({
                 }`}
               >
                 <div
-                  className="h-2 bg-orange-400"
+                  className="h-2 bg-blue-500"
                   style={{
                     width: `${
                       (((submittedResponses?.[index] as number) || 0) /
@@ -103,7 +103,7 @@ export const QuestionCard = ({
         !ended && (
           <input
             onChange={(e) => setDraftResponse(e.target.value)}
-            className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-purple-600 border-slate-700 bg-slate-800"
+            className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-blue-600 border-slate-700 bg-slate-800"
           />
         )}
 
@@ -114,8 +114,8 @@ export const QuestionCard = ({
               <div
                 className={`font-bold ${
                   word === localResponse && index === firstMatchIndex
-                    ? "text-orange-400"
-                    : "text-white"
+                    ? "text-white"
+                    : "text-gray-400"
                 }`}
                 key={`${word}-${index}`}
               >
@@ -127,7 +127,7 @@ export const QuestionCard = ({
       {!localResponse && !ended ? (
         <button
           disabled={!draftResponse}
-          className="bg-slate-900 text-orange-400 w-full p-2 font-semibold cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
+          className="bg-blue-500 rounded-md text-white w-full p-2 font-semibold cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
           onClick={() => {
             setLocalResponse(draftResponse);
             addResponse();
@@ -136,7 +136,7 @@ export const QuestionCard = ({
           Submit
         </button>
       ) : (
-        <div className="bg-slate-800 p-2 w-full rounded-md cursor-not-allowed text-center text-purple-500 font-semibold">
+        <div className="bg-blue-500 p-2 w-full rounded-md cursor-not-allowed text-center text-white opacity-50 font-semibold">
           Submitted
         </div>
       )}

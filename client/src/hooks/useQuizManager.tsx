@@ -1,18 +1,36 @@
 import { toast } from "react-toastify";
 import useQuizStore from "../store";
 import { useHistory } from "react-router-dom";
+import { QuestionTypes } from "../types";
 
 export const useQuizManager = () => {
   const {
     currentRoomID,
     setCurrentRoomID,
     setLiveQuestions,
+    setQuestions,
     setEnded,
     questions,
     updateAuthoredQuizzes,
+    setId,
   } = useQuizStore((store) => store);
 
   const history = useHistory();
+
+  const reset = () => {
+    setLiveQuestions([]);
+    setCurrentRoomID("");
+    setQuestions([
+      {
+        id: crypto.randomUUID(),
+        title: "Question goes here",
+        questionType: QuestionTypes.MCQ,
+        options: ["Option 1", "Option 2"],
+      },
+    ]);
+    setEnded(false);
+    setId("");
+  };
 
   const launchQuiz = async () => {
     try {
@@ -70,5 +88,5 @@ export const useQuizManager = () => {
     }
   };
 
-  return { launchQuiz, getQuiz, endQuiz };
+  return { launchQuiz, getQuiz, endQuiz, reset };
 };

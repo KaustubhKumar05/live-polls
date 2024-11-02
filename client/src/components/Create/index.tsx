@@ -41,11 +41,14 @@ export const Create = () => {
   );
 
   const { launchQuiz } = useQuizManager();
+  const disableOptionDeletion = !!(
+    activeQuestion.options?.length && activeQuestion.options.length === 2
+  );
 
   if (loading) return <FullPageLoader />;
 
   return (
-    <main className="w-full max-h-screen h-screen bg-gray-900 max-w mx-auto gap-4">
+    <main className="w-full max-h-screen h-screen bg-black max-w mx-auto gap-4">
       <div className="bg-slate-800 rounded-md h-16 mb-4 px-4 flex w-full mx-auto items-center justify-center">
         <div className="max-w-[1440px] mx-auto w-full flex justify-between items-center">
           <LivePollsTitle />
@@ -55,7 +58,7 @@ export const Create = () => {
               await launchQuiz();
               setLoading(false);
             }}
-            className="bg-purple-500 text-white font-semibold flex items-center gap-2 rounded-md justify-center p-2 px-3"
+            className="bg-blue-500 text-white font-semibold flex items-center gap-2 hover:opacity-90 rounded-md justify-center p-2 px-3"
           >
             <Rocket size={20} /> Launch
           </button>
@@ -82,7 +85,7 @@ export const Create = () => {
                 activeQuestion!.options
               )
             }
-            className="text-2xl text-white w-full p-2 outline-none border-b-2 border-purple-500 focus:border-dotted bg-transparent"
+            className="text-2xl text-white w-full p-2 outline-none border-b-2 border-blue-500 focus:border-dotted bg-transparent"
           />
 
           {activeQuestion?.questionType === QuestionTypes.MCQ && (
@@ -90,7 +93,7 @@ export const Create = () => {
               {activeQuestion.options?.map((option, index) => (
                 <div className="flex w-full items-center gap-4" key={index}>
                   <input
-                    className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-purple-600 border-slate-700 bg-slate-700"
+                    className="my-2 w-full text-lg text-white px-4 py-[5px] rounded-md outline-none border-2 focus:border-blue-500 border-slate-700 bg-slate-700"
                     onChange={(e) => {
                       updateActiveQuestion(
                         activeQuestion.title,
@@ -103,24 +106,30 @@ export const Create = () => {
                     key={`option-${index}`}
                     value={option}
                   />
-                  <div className="p-2 bg-slate-700 rounded-md">
-                    <Trash2
-                      className="cursor-pointer hover:text-red-400 text-white"
-                      onClick={() =>
-                        updateActiveQuestion(
-                          activeQuestion.title,
-                          activeQuestion.questionType,
-                          activeQuestion.options?.filter(
-                            (_, ind) => index !== ind
-                          )
+                  <button
+                    disabled={disableOptionDeletion}
+                    title={
+                      disableOptionDeletion
+                        ? "At least two options are required"
+                        : ""
+                    }
+                    onClick={() =>
+                      updateActiveQuestion(
+                        activeQuestion.title,
+                        activeQuestion.questionType,
+                        activeQuestion.options?.filter(
+                          (_, ind) => index !== ind
                         )
-                      }
-                    />
-                  </div>
+                      )
+                    }
+                    className="p-2 bg-gray-600 cursor-pointer rounded-md text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-80"
+                  >
+                    <Trash2 />
+                  </button>
                 </div>
               ))}
               <button
-                className="p-2 px-3 bg-slate-700 rounded-md mt-4 text-orange-400 font-semibold cursor-pointer disabled:cursor-not-allowed disabled:opacity-80 flex items-center gap-2 justify-center"
+                className="p-2 px-3 bg-gray-600 hover:opacity-90 rounded-md mt-4 text-white font-semibold cursor-pointer disabled:cursor-not-allowed disabled:opacity-80 flex items-center gap-2 justify-center"
                 disabled={
                   activeQuestion.options && activeQuestion.options.length > 5
                 }
@@ -154,15 +163,3 @@ export const Create = () => {
     </main>
   );
 };
-
-/*
- *
-Tab for question types > show a short description
-
-Launch
-Preview           Main          Sidebar
-
-New CTA                         Launch CTA
-previews        Draft UI        Question config: type + desc
- * 
- */

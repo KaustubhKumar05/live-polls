@@ -40,8 +40,8 @@ export const Config = ({
             }
             className={`p-2 text-white font-semibold w-full ${
               activeQuestion?.questionType === QuestionTypes[questionType]
-                ? "bg-gray-800 text-purple-500"
-                : "bg-gray-500 opacity-50"
+                ? "bg-gray-800"
+                : "bg-gray-600 opacity-50"
             }`}
             key={questionType}
           >
@@ -49,11 +49,14 @@ export const Config = ({
           </button>
         ))}
       </div>
-      <p className="text-gray-400 text-center text-sm font-semibold px-4">
+      <p className="text-gray-200 text-center text-sm font-semibold px-4">
         {description[activeQuestion!.questionType]}
       </p>
       <div className="m-2">
         <button
+          title={
+            questions.length === 1 ? "At least one question is required" : ""
+          }
           disabled={questions.length === 1}
           onClick={() => {
             decrementActiveQuestionIndex();
@@ -61,7 +64,7 @@ export const Config = ({
               questions.filter((question) => question.id !== activeQuestion!.id)
             );
           }}
-          className="mt-8 bg-red-400 text-white font-semibold flex items-center gap-2 rounded-md w-full justify-center p-2 disabled:opacity-80 disabled:cursor-not-allowed"
+          className="mt-8 bg-red-500 hover:opacity-90 text-white font-semibold flex items-center gap-2 rounded-md w-full justify-center p-2 disabled:opacity-80 disabled:cursor-not-allowed"
         >
           <Trash2 size={20} /> Delete question
         </button>

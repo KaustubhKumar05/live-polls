@@ -4,6 +4,7 @@ import useQuizStore from "../../store";
 import { useBroadcastEvent, useEventListener } from "@liveblocks/react";
 import { useQuizManager } from "../../hooks/useQuizManager";
 import { LivePollsTitle } from "../LivePollsTitle";
+import { toast } from "react-toastify";
 
 export const Header = ({ id }) => {
   const { authoredQuizzes, ended, setEnded } = useQuizStore((store) => store);
@@ -17,11 +18,12 @@ export const Header = ({ id }) => {
     // @ts-ignore
     if (event?.type === "STATUS" && event?.ended) {
       setEnded(true);
+      toast.info("Poll has ended", { theme: "dark" });
     }
   });
 
   return (
-    <div className="bg-slate-700 w-full flex items-center justify-center py-2">
+    <div className=" bg-slate-800 border-b border-gray-700 w-full flex items-center sticky top-0 z-20 justify-center py-3">
       <div className="flex w-full max-w-7xl justify-between items-center px-4">
         <LivePollsTitle />
         <div className="flex gap-4 items-center">
@@ -31,7 +33,7 @@ export const Header = ({ id }) => {
               setCopiedLink(true);
               setTimeout(() => setCopiedLink(false), 400);
             }}
-            className="flex items-center gap-1 text-white font-semibold p-2 rounded-md bg-slate-800 text-sm"
+            className="flex items-center gap-1 text-white font-semibold p-2 rounded-md bg-blue-500 text-sm"
           >
             <Copy size={20} /> {copiedLink ? "Copied" : "Copy link"}
           </button>

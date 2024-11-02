@@ -1,11 +1,22 @@
 import { LoaderPinwheel } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useQuizManager } from "../hooks/useQuizManager";
 
-export const LivePollsTitle = () => (
-  <Link to="/" className="w-max block">
-    <h1 className="text-white flex gap-2 font-bold text-2xl items-center cursor-pointer">
-      <LoaderPinwheel size={28} /> Live Polls
-    </h1>
-  </Link>
-);
+export const LivePollsTitle = () => {
+  const { reset } = useQuizManager();
+  const history = useHistory();
+  return (
+    <button
+      className=""
+      onClick={() => {
+        reset();
+        history.push("/");
+      }}
+    >
+      <h1 className="text-white flex gap-2 font-bold text-3xl items-center cursor-pointer">
+        <LoaderPinwheel size={32} /> Live Polls
+      </h1>
+    </button>
+  );
+};
