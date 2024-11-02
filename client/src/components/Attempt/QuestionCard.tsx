@@ -36,8 +36,8 @@ export const QuestionCard = ({
   const addResponse = useMutation(
     ({ storage }) => {
       const responses =
-        storage.get("responses") || ([] as unknown as LiveList<QuizResponse>);
-      // @ts-ignore
+        (storage.get("responses") as unknown as LiveList<QuizResponse>) ||
+        new LiveList<QuizResponse>([]);
       responses.push({
         response: draftResponse,
         id: crypto.randomUUID(),

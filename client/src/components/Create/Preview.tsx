@@ -18,9 +18,10 @@ export const Preview = ({
       questionType: QuestionTypes.MCQ,
       options: ["Option 1", "Option 2"],
     };
+    const newIndex = questions.length
     setQuestions([...questions, newQuestion]);
     // To prevent a race condition and fix the exec order
-    setTimeout(() => setActiveQuestionIndex(questions.length), 100);
+    setTimeout(() => setActiveQuestionIndex(newIndex), 100);
   };
   return (
     <section className="bg-slate-800 px-4 py-6 min-h-0 flex-1 overflow-y-auto rounded-md col-span-2">

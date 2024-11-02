@@ -15,8 +15,7 @@ export const Header = ({ id }) => {
   const [endClicked, setEndClicked] = useState(false);
 
   useEventListener(({ event }) => {
-    // @ts-ignore
-    if (event?.type === "STATUS" && event?.ended) {
+    if (event?.["type"] === "STATUS" && event?.["ended"]) {
       setEnded(true);
       toast.info("Poll has ended", { theme: "dark" });
     }

@@ -31,7 +31,7 @@ export const Home = () => {
 
       <input
         type="text"
-        placeholder="Enter a live poll code"
+        placeholder="Enter a poll code"
         value={quizID}
         onChange={(e) => setQuizID(e.target.value.trim())}
         className="w-full md:w-60 px-3 py-2 text-center bg-transparent border-gray-600 border-2 rounded-md outline-none text-white focus:border-dotted"
