@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { QuestionTypes, QuizStore } from "../types";
+import { QuizStore } from "../types";
 
 const useQuizStore = create<QuizStore>((set) => ({
   id: "",

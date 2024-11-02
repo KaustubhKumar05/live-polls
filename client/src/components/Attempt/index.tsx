@@ -12,7 +12,6 @@ import { View } from "./View";
 import { FullPageLoader } from "../FullPageLoader";
 import { useQuizManager } from "../../hooks/useQuizManager";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 
 export const Attempt = () => {
   let { id } = useParams();
