@@ -9,9 +9,9 @@ import { LiveList } from "@liveblocks/client";
 import useQuizStore from "../../store";
 import { Question } from "../../types";
 import { View } from "./View";
-import { FullPageLoader } from "../FullPageLoader";
 import { useQuizManager } from "../../hooks/useQuizManager";
 import { useHistory } from "react-router-dom";
+import { FullPageLoader } from "../FullPageLoader";
 
 export const Attempt = () => {
   let { id } = useParams();
@@ -36,7 +36,7 @@ export const Attempt = () => {
     }
   }, [fetching, liveQuestions]);
 
-  return liveQuestions && liveQuestions.length > 0 ? (
+  return currentRoomID ? (
     <LiveblocksProvider publicApiKey={import.meta.env.VITE_LB_PUBLIC_KEY}>
       <RoomProvider
         id={currentRoomID}

@@ -2,11 +2,13 @@ import React from "react";
 import useQuizStore from "../../store";
 import { QuestionCard } from "./QuestionCard";
 import { Header } from "./Header";
+import { useStorage } from "@liveblocks/react";
+import { FullPageLoader } from "../FullPageLoader";
 
 export const View = ({ id }: { id: string }) => {
   const { liveQuestions, ended } = useQuizStore((store) => store);
-
-  return (
+  const allResponses = useStorage((root) => root.responses);
+  return liveQuestions && allResponses ? (
     <div className="w-full h-screen max-h-screen overflow-hidden bg-black flex flex-col items-center">
       <Header id={id} />
       <div
@@ -35,5 +37,7 @@ export const View = ({ id }: { id: string }) => {
         </div>
       </div>
     </div>
+  ) : (
+    <FullPageLoader />
   );
 };
